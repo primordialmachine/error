@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Primordial Machine's Error Library
+// Primordial Machine's Errors Library
 // Copyright (C) 2017-2018 Michael Heilmann
 //
 // This software is provided 'as-is', without any express or implied warranty.
@@ -23,28 +23,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "primordialmachine/error/error.hpp"
-#include "primordialmachine/error/error_exception.hpp"
-#include <memory>
+#pragma once
 
-namespace primordialmachine {
-
-error::error(message_type message, error_position position) noexcept(
-  error::is_nothrow_constructible_v)
-  : m_message(std::move(message))
-  , m_position(std::move(position))
-{}
-
-error::error(const error& other) noexcept(
-  error::is_nothrow_copy_constructible_v)
-  : m_message(other.message())
-  , m_position(other.position())
-{}
-
-void
-error::raise() const
-{
-  throw error_exception(*this);
-}
-
-} // namespace primordialmachine
+#include "primordialmachine/errors/error.hpp"
+#include "primordialmachine/errors/error_position.hpp"
+#include "primordialmachine/errors/error_exception.hpp"

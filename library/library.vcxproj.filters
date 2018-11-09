@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Quelldateien">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Headerdateien">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Quelldateien\errors">
+      <UniqueIdentifier>{ae6bd578-5875-47df-93d8-7b68eaee80cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\errors">
+      <UniqueIdentifier>{34baaab2-f59f-4a78-a703-04bb386bde50}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="includes\primordialmachine\errors\include.hpp">
+      <Filter>Headerdateien\errors</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\primordialmachine\errors\error.hpp">
+      <Filter>Headerdateien\errors</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\primordialmachine\errors\error_exception.hpp">
+      <Filter>Headerdateien\errors</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\primordialmachine\errors\error_position.hpp">
+      <Filter>Headerdateien\errors</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sources\primordialmachine\errors\error.cpp">
+      <Filter>Quelldateien\errors</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\primordialmachine\errors\error_exception.cpp">
+      <Filter>Quelldateien\errors</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\primordialmachine\errors\error_position.cpp">
+      <Filter>Quelldateien\errors</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Primordial Machine's Error Library
+// Primordial Machine's Errors Library
 // Copyright (C) 2017-2018 Michael Heilmann
 //
 // This software is provided 'as-is', without any express or implied warranty.
@@ -23,30 +23,28 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "primordialmachine/errors/error.hpp"
+#include "primordialmachine/errors/error_exception.hpp"
+#include <memory>
 
 namespace primordialmachine {
 
-struct error_position
+error::error(message_type message, error_position position) noexcept(
+  error::is_nothrow_constructible_v)
+  : m_message(std::move(message))
+  , m_position(std::move(position))
+{}
+
+error::error(const error& other) noexcept(
+  error::is_nothrow_copy_constructible_v)
+  : m_message(other.message())
+  , m_position(other.position())
+{}
+
+void
+error::raise() const
 {
-private:
-  const char* m_file;
-
-  int m_line;
-
-public:
-  constexpr error_position(const char* file, int line)
-    : m_file(file)
-    , m_line(line)
-  {}
-
-  constexpr const char* file() const { return m_file; }
-
-  constexpr int line() const { return m_line; }
-
-}; // struct error_position
+  throw error_exception(*this);
+}
 
 } // namespace primordialmachine
-
-#define PRIMORDIALMACHINE_ERROR_POSITION()                                     \
-  primordialmachine::error_position(__FILE__, __LINE__)

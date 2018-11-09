@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Primordial Machine's Error Library
+// Primordial Machine's Errors Library
 // Copyright (C) 2017-2018 Michael Heilmann
 //
 // This software is provided 'as-is', without any express or implied warranty.
@@ -23,8 +23,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "primordialmachine/error/error_exception.hpp"
-#include "primordialmachine/error/error.hpp"
+#include "primordialmachine/errors/error_exception.hpp"
+#include "primordialmachine/errors/error.hpp"
 #include <memory>
 
 namespace primordialmachine {

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Primordial Machine's Error Library
+// Primordial Machine's Errors Library
 // Copyright (C) 2017-2018 Michael Heilmann
 //
 // This software is provided 'as-is', without any express or implied warranty.
@@ -23,4 +23,37 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "primordialmachine/error/error_position.hpp"
+#pragma once
+
+#include "primordialmachine/errors/error.hpp"
+
+namespace primordialmachine {
+
+class error_exception : public std::exception
+{
+public:
+  using error_type = primordialmachine::error;
+
+  error_exception();
+
+  error_exception(const error_type& error);
+
+  constexpr const std::shared_ptr<error_type>& error() const { return m_error; }
+
+  const char* what() const override;
+
+private:
+  std::shared_ptr<error_type> m_error;
+
+}; // class error_exception
+
+static_assert(std::is_nothrow_move_assignable_v<error_exception>,
+              "error exception is supposed to be nothrow move assignable");
+static_assert(std::is_nothrow_copy_assignable_v<error_exception>,
+              "error_exception is supposed to be nothrow copy assignable");
+static_assert(std::is_nothrow_move_constructible_v<error_exception>,
+              "error_exception is supposed to be nothrow move constructible");
+static_assert(std::is_nothrow_copy_constructible_v<error_exception>,
+              "error_exception is suppposed to be nothrow copy constructible");
+
+} // namespace primordialmachine

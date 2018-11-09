@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Primordial Machine's Error Library
+// Primordial Machine's Errors Library
 // Copyright (C) 2017-2018 Michael Heilmann
 //
 // This software is provided 'as-is', without any express or implied warranty.
@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "primordialmachine/error/error_position.hpp"
+#include "primordialmachine/errors/error_position.hpp"
 #include <string>
 #include <type_traits>
 
