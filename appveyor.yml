@@ -1,0 +1,45 @@
+# Copyright (c) 2018 Michael Heilmann. All rights reserved.
+
+clone_depth: 1
+
+image: Visual Studio 2017 # Build worker image (VM template)
+
+branches:
+  only:
+    - master
+    - develop
+
+platform:
+  - x86
+  - x64
+
+configuration:
+  - Debug
+  - Release
+
+install:
+  # Download and install GoogleTestAdapter.
+  - set GOOGLETESTADAPTER_URL="https://github.com/csoltenborn/GoogleTestAdapter/releases/download/v0.14.0/GoogleTestAdapter-0.14.0.vsix"
+  - appveyor DownloadFile %GOOGLETESTADAPTER_URL% -FileName GoogleTestAdapter-0.14.0.vsix
+  - 7z x GoogleTestAdapter-0.14.0.vsix -o"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\GoogleTestAdapter-0.14.0" > nul
+
+before_build:
+  - nuget restore         # Restore NuGet packages.
+
+build:
+  parallel: true          # Enable parallel builds.
+  project: solution.sln   # Path to Visual Studio solution.
+
+test_script:
+  - ps: |
+      #$logger="Appveyor"
+      #$configuration=$env:configuration
+      #$platform=$env:platform
+      #$testAdapterPath="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\GoogleTestAdapter-0.14.0"
+      #$testPath="products\test\$platform\$configuration\errors-test.exe"
+      #vstest.console /Logger:$logger /Platform:$platform /TestAdapterPath:$testAdapterPath /inIsolation $testPath
+
+matrix:
+  fast_finish: true       # If one matrix entry fails, all entries fails.
+
+notifications:
