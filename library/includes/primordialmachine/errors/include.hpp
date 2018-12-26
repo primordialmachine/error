@@ -27,4 +27,4 @@
 
 #include "primordialmachine/errors/error.hpp"
 #include "primordialmachine/errors/error_position.hpp"
-#include "primordialmachine/errors/error_exception.hpp"
+#include "primordialmachine/errors/exception.hpp"

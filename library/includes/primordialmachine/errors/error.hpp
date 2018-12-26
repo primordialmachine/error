@@ -59,6 +59,7 @@ protected:
   error(const error& other) noexcept(error::is_nothrow_copy_constructible_v);
 
   virtual error* clone_implementation() const = 0;
+  virtual void raise_implementation() const;
 
 public:
   constexpr const message_type& message() const { return m_message; }
@@ -68,7 +69,7 @@ public:
   void raise() const;
 
 private:
-  friend class error_exception;
+  friend class exception;
 
   message_type m_message;
 

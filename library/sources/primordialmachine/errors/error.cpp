@@ -24,7 +24,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "primordialmachine/errors/error.hpp"
-#include "primordialmachine/errors/error_exception.hpp"
+#include "primordialmachine/errors/exception.hpp"
 #include <memory>
 
 namespace primordialmachine {
@@ -42,9 +42,15 @@ error::error(const error& other) noexcept(
 {}
 
 void
+error::raise_implementation() const
+{
+  throw exception(*this);
+}
+
+void
 error::raise() const
 {
-  throw error_exception(*this);
+  raise_implementation();
 }
 
 } // namespace primordialmachine

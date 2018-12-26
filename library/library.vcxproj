@@ -20,13 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\primordialmachine\errors\error.hpp" />
-    <ClInclude Include="includes\primordialmachine\errors\error_exception.hpp" />
+    <ClInclude Include="includes\primordialmachine\errors\exception.hpp" />
     <ClInclude Include="includes\primordialmachine\errors\error_position.hpp" />
     <ClInclude Include="includes\primordialmachine\errors\include.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\primordialmachine\errors\error.cpp" />
-    <ClCompile Include="sources\primordialmachine\errors\error_exception.cpp" />
+    <ClCompile Include="sources\primordialmachine\errors\exception.cpp" />
     <ClCompile Include="sources\primordialmachine\errors\error_position.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -133,8 +133,8 @@
       <Command>xcopy $(ProjectDir)includes $(PackageDir)includes\ /S /E /Y
 xcopy $(OutDir)*.lib $(PackageDir)libraries\ /S /E /Y</Command>
       <Message>Create package.</Message>
-      <Outputs>$(PackageDir)includes\primordialmachine\errors\error.hpp;$(PackageDir)includes\primordialmachine\errors\error_exception.hpp;$(PackageDir)includes\primordialmachine\errors\error_position.hpp;$(PackageDir)includes\primordialmachine\errors\include.hpp</Outputs>
-      <Inputs>$(ProjectDir)includes\primordialmachine\errors\error.hpp;$(ProjectDir)includes\primordialmachine\errors\error_exception.hpp;$(ProjectDir)includes\primordialmachine\errors\error_position.hpp;$(ProjectDir)includes\primordialmachine\errors\include.hpp</Inputs>
+      <Outputs>$(PackageDir)includes\primordialmachine\errors\error.hpp;$(PackageDir)includes\primordialmachine\errors\exception.hpp;$(PackageDir)includes\primordialmachine\errors\error_position.hpp;$(PackageDir)includes\primordialmachine\errors\include.hpp</Outputs>
+      <Inputs>$(ProjectDir)includes\primordialmachine\errors\error.hpp;$(ProjectDir)includes\primordialmachine\errors\exception.hpp;$(ProjectDir)includes\primordialmachine\errors\error_position.hpp;$(ProjectDir)includes\primordialmachine\errors\include.hpp</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -160,8 +160,8 @@ xcopy $(OutDir)*.lib $(PackageDir)libraries\ /S /E /Y</Command>
       <Command>xcopy $(ProjectDir)includes $(PackageDir)includes\ /S /E /Y
 xcopy $(OutDir)*.lib $(PackageDir)libraries\ /S /E /Y</Command>
       <Message>Create package.</Message>
-      <Outputs>$(PackageDir)includes\primordialmachine\errors\error.hpp;$(PackageDir)includes\primordialmachine\errors\error_exception.hpp;$(PackageDir)includes\primordialmachine\errors\error_position.hpp;$(PackageDir)includes\primordialmachine\errors\include.hpp</Outputs>
-      <Inputs>$(ProjectDir)includes\primordialmachine\errors\error.hpp;$(ProjectDir)includes\primordialmachine\errors\error_exception.hpp;$(ProjectDir)includes\primordialmachine\errors\error_position.hpp;$(ProjectDir)includes\primordialmachine\errors\include.hpp</Inputs>
+      <Outputs>$(PackageDir)includes\primordialmachine\errors\error.hpp;$(PackageDir)includes\primordialmachine\errors\exception.hpp;$(PackageDir)includes\primordialmachine\errors\error_position.hpp;$(PackageDir)includes\primordialmachine\errors\include.hpp</Outputs>
+      <Inputs>$(ProjectDir)includes\primordialmachine\errors\error.hpp;$(ProjectDir)includes\primordialmachine\errors\exception.hpp;$(ProjectDir)includes\primordialmachine\errors\error_position.hpp;$(ProjectDir)includes\primordialmachine\errors\include.hpp</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -191,8 +191,8 @@ xcopy $(OutDir)*.lib $(PackageDir)libraries\ /S /E /Y</Command>
       <Command>xcopy $(ProjectDir)includes $(PackageDir)includes\ /S /E /Y
 xcopy $(OutDir)*.lib $(PackageDir)libraries\ /S /E /Y</Command>
       <Message>Create package.</Message>
-      <Outputs>$(PackageDir)includes\primordialmachine\errors\error.hpp;$(PackageDir)includes\primordialmachine\errors\error_exception.hpp;$(PackageDir)includes\primordialmachine\errors\error_position.hpp;$(PackageDir)includes\primordialmachine\errors\include.hpp</Outputs>
-      <Inputs>$(ProjectDir)includes\primordialmachine\errors\error.hpp;$(ProjectDir)includes\primordialmachine\errors\error_exception.hpp;$(ProjectDir)includes\primordialmachine\errors\error_position.hpp;$(ProjectDir)includes\primordialmachine\errors\include.hpp</Inputs>
+      <Outputs>$(PackageDir)includes\primordialmachine\errors\error.hpp;$(PackageDir)includes\primordialmachine\errors\exception.hpp;$(PackageDir)includes\primordialmachine\errors\error_position.hpp;$(PackageDir)includes\primordialmachine\errors\include.hpp</Outputs>
+      <Inputs>$(ProjectDir)includes\primordialmachine\errors\error.hpp;$(ProjectDir)includes\primordialmachine\errors\exception.hpp;$(ProjectDir)includes\primordialmachine\errors\error_position.hpp;$(ProjectDir)includes\primordialmachine\errors\include.hpp</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -222,8 +222,8 @@ xcopy $(OutDir)*.lib $(PackageDir)libraries\ /S /E /Y</Command>
       <Command>xcopy $(ProjectDir)includes $(PackageDir)includes\ /S /E /Y
 xcopy $(OutDir)*.lib $(PackageDir)libraries\ /S /E /Y</Command>
       <Message>Create package.</Message>
-      <Outputs>$(PackageDir)includes\primordialmachine\errors\error.hpp;$(PackageDir)includes\primordialmachine\errors\error_exception.hpp;$(PackageDir)includes\primordialmachine\errors\error_position.hpp;$(PackageDir)includes\primordialmachine\errors\include.hpp</Outputs>
-      <Inputs>$(ProjectDir)includes\primordialmachine\errors\error.hpp;$(ProjectDir)includes\primordialmachine\errors\error_exception.hpp;$(ProjectDir)includes\primordialmachine\errors\error_position.hpp;$(ProjectDir)includes\primordialmachine\errors\include.hpp</Inputs>
+      <Outputs>$(PackageDir)includes\primordialmachine\errors\error.hpp;$(PackageDir)includes\primordialmachine\errors\exception.hpp;$(PackageDir)includes\primordialmachine\errors\error_position.hpp;$(PackageDir)includes\primordialmachine\errors\include.hpp</Outputs>
+      <Inputs>$(ProjectDir)includes\primordialmachine\errors\error.hpp;$(ProjectDir)includes\primordialmachine\errors\exception.hpp;$(ProjectDir)includes\primordialmachine\errors\error_position.hpp;$(ProjectDir)includes\primordialmachine\errors\include.hpp</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

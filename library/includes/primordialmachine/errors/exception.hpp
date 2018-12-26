@@ -23,27 +23,37 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "primordialmachine/errors/error_exception.hpp"
+#pragma once
+
 #include "primordialmachine/errors/error.hpp"
-#include <memory>
 
 namespace primordialmachine {
 
-error_exception::error_exception()
-  : m_error(nullptr)
+class exception : public std::exception
 {
-  throw std::bad_exception();
-}
+public:
+  using error_type = primordialmachine::error;
 
-error_exception::error_exception(const error_type& error)
-  // delete p is invoked if std::shared_ptr<error>(p) raises an exception.
-  : m_error(std::shared_ptr<error_type>(error.clone_implementation()))
-{}
+  exception();
 
-const char*
-error_exception::what() const
-{
-  return m_error->message().c_str();
-}
+  exception(const error_type& error);
+
+  constexpr const std::shared_ptr<error_type>& error() const { return m_error; }
+
+  const char* what() const override;
+
+private:
+  std::shared_ptr<error_type> m_error;
+
+}; // class exception
+
+static_assert(std::is_nothrow_move_assignable_v<exception>,
+              "error exception is supposed to be nothrow move assignable");
+static_assert(std::is_nothrow_copy_assignable_v<exception>,
+              "error_exception is supposed to be nothrow copy assignable");
+static_assert(std::is_nothrow_move_constructible_v<exception>,
+              "error_exception is supposed to be nothrow move constructible");
+static_assert(std::is_nothrow_copy_constructible_v<exception>,
+              "error_exception is suppposed to be nothrow copy constructible");
 
 } // namespace primordialmachine

@@ -23,10 +23,10 @@
     <ClInclude Include="includes\primordialmachine\errors\error.hpp">
       <Filter>Headerdateien\errors</Filter>
     </ClInclude>
-    <ClInclude Include="includes\primordialmachine\errors\error_exception.hpp">
+    <ClInclude Include="includes\primordialmachine\errors\error_position.hpp">
       <Filter>Headerdateien\errors</Filter>
     </ClInclude>
-    <ClInclude Include="includes\primordialmachine\errors\error_position.hpp">
+    <ClInclude Include="includes\primordialmachine\errors\exception.hpp">
       <Filter>Headerdateien\errors</Filter>
     </ClInclude>
   </ItemGroup>
@@ -34,10 +34,10 @@
     <ClCompile Include="sources\primordialmachine\errors\error.cpp">
       <Filter>Quelldateien\errors</Filter>
     </ClCompile>
-    <ClCompile Include="sources\primordialmachine\errors\error_exception.cpp">
+    <ClCompile Include="sources\primordialmachine\errors\error_position.cpp">
       <Filter>Quelldateien\errors</Filter>
     </ClCompile>
-    <ClCompile Include="sources\primordialmachine\errors\error_position.cpp">
+    <ClCompile Include="sources\primordialmachine\errors\exception.cpp">
       <Filter>Quelldateien\errors</Filter>
     </ClCompile>
   </ItemGroup>
