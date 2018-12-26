@@ -1,0 +1,74 @@
+# Copyright (c) 2018 Michael Heilmann. All rights reserved.
+
+clone_depth: 1
+
+image: Visual Studio 2017 # Build worker image (VM template)
+
+branches:
+  only:
+    - develop
+
+platform:
+  - x86
+  - x64
+
+configuration:
+  - Debug
+  - Release
+
+environment:
+  # Environment variables pertaining to GoogleTestAdapter.
+  GOOGLETESTADAPTER_FILENAME : "GoogleTestAdapter-0.14.0.vsix"
+  GOOGLETESTADAPTER_URL : "https://github.com/csoltenborn/GoogleTestAdapter/releases/download/v0.14.0/GoogleTestAdapter-0.14.0.vsix"
+  GOOGLETESTADAPTER_INSTALL_PATH : "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\IDE\\GoogleTestAdapter-0.14.0"
+  # Environment variables pertaining to MikTex.
+  MIKTEX_FILENAME : "miktex-portable-2.9.6753.exe"
+  MIKTEX_URL : "https://miktex.org/download/ctan/systems/win32/miktex/setup/windows-x86/miktex-portable-2.9.6753.exe"
+  MIKTEX_INSTALL_PATH : "C:\\miktex"
+
+cache:
+  # Cache archive and installation of GoogleTestAdapter.
+  - "%GOOGLETESTADAPTER_FILENAME% -> appveyor-develop.yml"
+  - "%GOOGLETESTADAPTER_INSTALL_PATH% -> appveyor-develop.yml"
+  # Cache archive and installation of MikTex.
+  - "%MIKTEX_FILENAME% -> appveyor-develop.yml"
+  - "%MIKTEX_INSTALL_PATH% -> appveyor-develop.yml"
+
+install:
+  # Download and install GoogleTestAdapter.
+  # Use cached archives/installations if possible.
+  - cmd: IF NOT EXIST "%GOOGLETESTADAPTER_FILENAME%" (appveyor DownloadFile "%GOOGLETESTADAPTER_URL%" -FileName "%GOOGLETESTADAPTER_FILENAME%")
+  - cmd: IF EXIST "%GOOGLETESTADAPTER_INSTALL_PATH%" (ECHO "using cached GoogleTestAdapter")
+  - cmd: IF NOT EXIST "%GOOGLETESTADAPTER_INSTALL_PATH%" (7z x "%GOOGLETESTADAPTER_FILENAME%" -o"%GOOGLETESTADAPTER_INSTALL_PATH%" > nul)
+  # Download and install MikTex.
+  # Use cached archives/installations if possible.
+  - IF NOT EXIST "%MIKTEX_FILENAME%" (appveyor DownloadFile "%MIKTEX_URL%" -FileName "%MIKTEX_FILENAME%")
+  - IF EXIST "%MIKTEX_INSTALL_PATH%" (ECHO "using cached MikTex")
+  - IF NOT EXIST "%MIKTEX_INSTALL_PATH%" (7z x "%MIKTEX_FILENAME%" -o"%MIKTEX_INSTALL_PATH%" > nul)
+  - set "PATH=%PATH%;%MIKTEX_INSTALL_PATH%\texmfs\install\miktex\bin"
+  - initexmf --set-config-value "[MPM]AutoInstall=1" 
+
+before_build:
+  - nuget restore         # Restore NuGet packages.
+
+build_script:
+  - ps: |
+      msbuild solution.sln /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+  - cmd: |
+      cd documentation
+      latexmk -pdf index.tex
+      cd ..
+
+test_script:
+  - ps: |
+      $logger="Appveyor"
+      $configuration=$env:configuration
+      $platform=$env:platform
+      $testAdapterPath="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\GoogleTestAdapter-0.14.0"
+      $testPath="products\test\$platform\$configuration\errors-test.exe"
+      vstest.console /Logger:$logger /Platform:$platform /TestAdapterPath:$testAdapterPath /inIsolation $testPath
+
+matrix:
+  fast_finish: true       # If one matrix entry fails, all entries fails.
+
+notifications:
