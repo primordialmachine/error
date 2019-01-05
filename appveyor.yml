@@ -23,6 +23,37 @@
 #
 ###################################################################################################
 
+# ORGANIZATION_NAME
+#   The name of the publishing organization.
+#   Example: 'primordialmachine'.
+# PACKAGE_NAME
+#   The name of the published package.
+#   Example: 'errors-functors'.
+# CONFIGURATION:
+#   The configuration.
+#   Example: 'release'.
+# PLATFORM:
+#   The platform.
+#   Example: 'x64'.
+# ARTIFACT_FILENAME
+#   The file name of the artifact.
+#   Example: 'primordialmachine-errors-release-x64.zip'.
+# ARTIFACT_NAME
+#   The name of the artifact.
+#   Example: 'primordialmachine-errors-release-x64'.
+#
+# GOOGLETESTADAPTER_FILENAME
+#   The filename of the archive of GoogleTestAdapter.
+#   Example: 'GoogleTestAdapter-0.14.0.vsix'.
+# GOOGLETESTADAPTER_URL
+#   The URL of the archive of GoogleTestAdapter.
+#   Example: 'https://github.com/csoltenborn/GoogleTestAdapter/releases/download/v0.14.0/GoogleTestAdapter-0.14.0.vsix'.
+# MIKTEX_FILENAME
+#   The filename of the archive of MikTex.
+#   Example: 'miktex-portable-2.9.6942.exe'.
+# MIKTEX_URL
+#   The URL of the archive of MikTex.
+#   Example: 'https://miktex.org/download/ctan/systems/win32/miktex/setup/windows-x86/miktex-portable-2.9.6942.exe'.
 
 clone_depth: 1
 
@@ -30,6 +61,7 @@ image: Visual Studio 2017 # Build worker image (VM template)
 
 branches:
   only:
+    - develop
     - master
 
 platform:
@@ -41,13 +73,16 @@ configuration:
   - Release
 
 environment:
+  # Environment variables pertaining to the organization and package.
+  ORGANIZATION_NAME : "primordialmachine"
+  PACKAGE_NAME : "errors"
   # Environment variables pertaining to GoogleTestAdapter.
   GOOGLETESTADAPTER_FILENAME : "GoogleTestAdapter-0.14.0.vsix"
   GOOGLETESTADAPTER_URL : "https://github.com/csoltenborn/GoogleTestAdapter/releases/download/v0.14.0/GoogleTestAdapter-0.14.0.vsix"
   GOOGLETESTADAPTER_INSTALL_PATH : "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\IDE\\GoogleTestAdapter-0.14.0"
   # Environment variables pertaining to MikTex.
-  MIKTEX_FILENAME : "miktex-portable-2.9.6753.exe"
-  MIKTEX_URL : "https://miktex.org/download/ctan/systems/win32/miktex/setup/windows-x86/miktex-portable-2.9.6753.exe"
+  MIKTEX_FILENAME : "miktex-portable-2.9.6942.exe"
+  MIKTEX_URL : "https://miktex.org/download/ctan/systems/win32/miktex/setup/windows-x86/miktex-portable-2.9.6942.exe"
   MIKTEX_INSTALL_PATH : "C:\\miktex"
 
 cache:
@@ -61,9 +96,9 @@ cache:
 install:
   # Download and install GoogleTestAdapter.
   # Use cached archives/installations if possible.
-  - cmd: IF NOT EXIST "%GOOGLETESTADAPTER_FILENAME%" (appveyor DownloadFile "%GOOGLETESTADAPTER_URL%" -FileName "%GOOGLETESTADAPTER_FILENAME%")
-  - cmd: IF EXIST "%GOOGLETESTADAPTER_INSTALL_PATH%" (ECHO "using cached GoogleTestAdapter")
-  - cmd: IF NOT EXIST "%GOOGLETESTADAPTER_INSTALL_PATH%" (7z x "%GOOGLETESTADAPTER_FILENAME%" -o"%GOOGLETESTADAPTER_INSTALL_PATH%" > nul)
+  - IF NOT EXIST "%GOOGLETESTADAPTER_FILENAME%" (appveyor DownloadFile "%GOOGLETESTADAPTER_URL%" -FileName "%GOOGLETESTADAPTER_FILENAME%")
+  - IF EXIST "%GOOGLETESTADAPTER_INSTALL_PATH%" (ECHO "using cached GoogleTestAdapter")
+  - IF NOT EXIST "%GOOGLETESTADAPTER_INSTALL_PATH%" (7z x "%GOOGLETESTADAPTER_FILENAME%" -o"%GOOGLETESTADAPTER_INSTALL_PATH%" > nul)
   # Download and install MikTex.
   # Use cached archives/installations if possible.
   - IF NOT EXIST "%MIKTEX_FILENAME%" (appveyor DownloadFile "%MIKTEX_URL%" -FileName "%MIKTEX_FILENAME%")
@@ -74,6 +109,11 @@ install:
 
 before_build:
   - nuget restore         # Restore NuGet packages.
+  - ps: |
+      $env:ARTIFACT_NAME="$($env:ORGANIZATION_NAME.tolower())-$($env:PACKAGE_NAME.tolower())-$($env:configuration.tolower())-$($env:platform.tolower())"
+      $env:ARTIFACT_FILENAME="$($env:ARTIFACT_NAME).zip"
+      $env:DOCUMENTATION_ARTIFACT_NAME="$($env:ORGANIZATION_NAME.tolower())-$($env:PACKAGE_NAME.tolower())-$($env:configuration.tolower())-$($env:platform.tolower())"
+      $env:DOCUMENTATION_ARTIFACT_FILENAME="$($env:DOCUMENTATION_ARTIFACT_NAME).pdf"
 
 build_script:
   - ps: |
@@ -83,16 +123,44 @@ build_script:
       latexmk -pdf index.tex
       cd ..
 
+after_build:
+   - ps: |
+       cd packages
+       7z a $env:ARTIFACT_FILENAME $($env:ORGANIZATION_NAME.tolower())
+       Move-Item -Path ./$env:ARTIFACT_FILENAME -Destination ./../$env:ARTIFACT_FILENAME
+       cd ..
+   - ps: |
+       Move-Item -Path documentation/index.pdf -Destination ./$env:DOCUMENTATION_ARTIFACT_FILENAME
+
 test_script:
   - ps: |
       $logger="Appveyor"
       $configuration=$env:configuration
       $platform=$env:platform
       $testAdapterPath="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\GoogleTestAdapter-0.14.0"
-      $testPath="products\test\$platform\$configuration\errors-test.exe"
+      $testPath="products\test\$platform\$configuration\$($env:PACKAGE_NAME.tolower())-test.exe"
       vstest.console /Logger:$logger /Platform:$platform /TestAdapterPath:$testAdapterPath /inIsolation $testPath
 
+artifacts:
+  - path: $(ARTIFACT_FILENAME)
+    name: $(ARTIFACT_NAME)
+  - path: $(DOCUMENTATION_ARTIFACT_FILENAME)
+    name: $(DOCUMENTATION_ARTIFACT_NAME)
+      
 matrix:
   fast_finish: true       # If one matrix entry fails, all entries fails.
 
 notifications:
+
+# GitHub Prerelease.
+deploy:
+  release: "Automatic Prerelease from AppVeyor Build $(appveyor_build_version)"
+  description: "Automatic Prerelease from AppVeyor Build $(appveyor_build_version) of\n branch 'master' and tag '$(appveyor_repo_tag_name)'."
+  provider: GitHub
+  auth_token:
+    secure: 46x+mlkXPA9TkpptTOTfkhkmDrswaZvDrwUFPLFCCNcbL3lh98gFpxnGgO5eW2eT # Encrypted personal access token.
+  draft: true
+  prerelease: true
+  force_update: true
+  on:
+    APPVEYOR_REPO_TAG: true        # Deploy on tag push only.
