@@ -1,152 +1,133 @@
-\documentclass[oneside]{article}
-\usepackage[utf8]{inputenc}
-\usepackage{color}
-\usepackage{microtype}
-\usepackage{graphicx}
-\usepackage[colorlinks]{hyperref}
-\usepackage{listings}
-\usepackage[margin=0.75in]{geometry}
-\usepackage{amsmath,amssymb,amsfonts}
+\documentclass[oneside]{book}
 
 \input{common}
+\usepackage{listings}
 
 \SetOrganization{Primordial Machine's}
 \SetLibraryName{Errors Library}
+
+\SetLibraryIncludeFileName{include.hpp}
+\SetLibraryIncludesDirectoryPath{primordialmachine/errors/\newline\$(PlatformTarget.toLower())/\$(Configuration.toLower())/includes}
+
+\SetLibraryIncludeDirectiveFilePath{primordialmachine/errors/include.hpp}
+
 \SetLibraryVersion{v1.3}
 \SetLibraryRepository{https://github.com/primordialmachine/errors}
 \SetAuthor{Michael Heilmann}
 \SetEmail{michaelheilmann@primordialmachine.com}
+
+\SetDocumentType{User Manual}
 
 \begin{document}
 \lstset{language=C++,
   basicstyle=\footnotesize, % reduce the font size.
   showstringspaces=false    % do not display "squat-u" for whitespace.
 }
+
+\frontmatter
+
+\begin{titlepage}
 \maketitle
+\end{titlepage}
+
 \tableofcontents
-\section{Synopsis}
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\pagenumbering{gobble}
+
+\mainmatter
+
+\chapter{Synopsis}
 C++ 17 library providing extendable error objects and exceptions.
 The library is made available publicly on
 \href{\GetLibraryRepository}{Github}
 under the
 \href{\GetLibraryRepository/blob/master/LICENSE}{MIT License}.
 
-\section{Limitations and Restrictions}
+\chapter{Limitations and Restrictions}
 The library officially only supports Visual Studio 2017 and Windows 10.
 
-\section{Usage example}
+\chapter{Usage example}
 The folder \href{\GetLibraryRepository/blob/master/example}{example} contains example programs.
 
-\section{Building under Visual Studio 2017}
-\begin{enumerate}
-\item Open the solution \texttt{errors.sln} in Microsoft Visual Studio 2017.
-\item Batch build everything.
-\item The folder \texttt{packages} contains the distribution of the library i.e. include files and the
-      static libraries for
-  \begin{enumerate}
-    \item the platforms \texttt{Win32} and \texttt{x64} and
-    \item configurations \texttt{Release} and \texttt{Debug}.
-  \end{enumerate}
-\item Copy the contents of the `packages` folder into a directory. Let
-      \verb+[library home]+ be a placeholder denoting the path by which that folder
-      can be referenced from your project.
-\item Add
-  \begin{enumerate}
-    \item the include path
-\begin{verbatim}
-[library home]/primordialmachine/errors/
-$(PlatformTarget.toLower())/$(Configuration.toLower())/includes
-\end{verbatim}
-	and
-    \item the library path
-\begin{verbatim}
-[library home]/primordialmachine/errors/
-$(PlatformTarget.toLower())/$(Configuration.toLower())/libraries
-\end{verbatim}
-    to your project.
-\end{enumerate}
-\item Link your project with the library \verb+errors.lib+.
-\item Add the include directive \lstinline{#include "primordialmachine/errors/include.hpp"} where appropriate.
-\item You can now use the functionality provided by the library.
-\end{enumerate}
+\input{building_visual_studio_2017}
 
-\section{Library Interface Documentation}
+\chapter{Library Interface Documentation}
 
-\subsection{\texttt{primordialmachine}}
+\section{\texttt{primordialmachine}}
 The namespace this library is adding its declarations/definitions to.
 The added namespace elements are documented below
 
-\subsection{\texttt{PRIMORDIALMACHINE\_ERROR\_LOCATION}}
+\section{\texttt{PRIMORDIALMACHINE\_ERROR\_LOCATION}}
 A macro evaluating to an \texttt{error\_location} object with the file name and line number of the
 location within the C++ program at which the macro was evaluated.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{\texttt{error\_position}}
+\section{\texttt{error\_position}}
 Objects of type \texttt{error\_position} represent locations in a C++ program in terms of the   name
 of a source file and the line number of a line in that source file. \texttt{error\_position}      is
 nothrow (copy|move) (constructible|assignable).
 
-\subsubsection{\texttt{constexpr error\_position(const char *file, int line)}}
+\section{\texttt{constexpr error\_position(const char *file, int line)}}
 Construct this \texttt{error\_position} object.
 \begin{enumerate}
    \item\texttt{file} is a pointer to a static constant string denoting the name of the C++ source file.
    \item\texttt{line} is a non-negative \texttt{int} value denoting the line in the C++ source file.
 \end{enumerate}
 
-\subsubsection{\texttt{constexpr const char *file() const}}
+\subsection{\texttt{constexpr const char *file() const}}
 A pointer to a static constant string denoting the name of the C++ source file.
 
-\subsubsection{\texttt{constexpr int line() const}}
+\subsection{\texttt{constexpr int line() const}}
 A positive \texttt{int} value denoting the line in the C++ source file.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{\texttt{error}}
+\section{\texttt{error}}
 The base class from which to derive custom error types.
 
-\subsubsection{\texttt{using message\_type} (v1.0)}
+\subsection{\texttt{using message\_type} (v1.0)}
 An alias for \texttt{std::string}.
 
-\subsubsection{\texttt{using position\_type} (v1.0)}
+\subsection{\texttt{using position\_type} (v1.0)}
 An alias for \texttt{primordialmachine::error\_position}.
 
-\subsubsection{\texttt{error(message\_type message, position\_type position)}}
+\subsection{\texttt{error(message\_type message, position\_type position)}}
 Construct this error object.
 \begin{enumerate}
 	\item\texttt{message}: The message of the error.
 	\item\texttt{position}: The position associated with the error.
 \end{enumerate}
 
-\subsubsection{\texttt{constexpr message\_type\& message() const}}
+\subsection{\texttt{constexpr message\_type\& message() const}}
 Get the message of the error.
 
-\subsubsection{\texttt{constexpr position\_type\& position() const}}
+\subsection{\texttt{constexpr position\_type\& position() const}}
 Get the position of the error.
 
-\subsubsection{\texttt{void raise() const}}
+\subsection{\texttt{void raise() const}}
 Raise an \texttt{exception} object wrapping a clone of this \texttt{error} object.
 
-\subsubsection{\texttt{virtual void raise\_implementation() const} (v1.3)}
+\subsection{\texttt{virtual void raise\_implementation() const} (v1.3)}
 May be overriden by any descendant class \texttt{D} of \texttt{error} to raise an
 \texttt{exception} or derived type object.
 Exceptions raised by this function are propagated.
 
-\subsubsection{\texttt{virtual error *clone\_implementation() const}}
+\subsection{\texttt{virtual error *clone\_implementation() const}}
 Must be overriden by any descendant class \texttt{error} to return a clone of the type of that descendant class.
 Exceptions raised by this function are propagated.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{\texttt{class exception}}
+\section{\texttt{class exception}}
 Class derived from \texttt{std::exception} wrapping around an \texttt{error} or derived type
 object. \texttt{exception} or derived types must be nothrow (copy/move) (assignable/constructible).
 
-\subsubsection{\texttt{using error\_type} (v1.0)}
+\subsection{\texttt{using error\_type} (v1.0)}
 An alias for \lstinline{primordialmachine::error}.
 
-\subsubsection{\texttt{error\_exception(const error\_type\& error)}}
+\subsection{\texttt{error\_exception(const error\_type\& error)}}
 Construct this \texttt{error\_exception} object wrapping a clone of the \texttt{error\_type} or
 derived type object \texttt{error}.
 
-\subsubsection{\texttt{constexpr const std\_shared\_ptr\textless{}error\_type\textgreater{}\& error() const}}
+\subsection{\texttt{constexpr const std\_shared\_ptr\textless{}error\_type\textgreater{}\& error() const}}
 Get the wrapped \texttt{error} or derived type object.
 
-\subsubsection{\texttt{const char *what() const override}}
+\subsection{\texttt{const char *what() const override}}
 Override of function in \texttt{std::exception}.
 Returns a pointer to the message of the wrapped \texttt{error} or derived type object.
 
