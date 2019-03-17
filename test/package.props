@@ -11,7 +11,6 @@
   <ItemGroup>
     <BuildMacro Include="PackageName">
       <Value>$(PackageName)</Value>
-      <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
   </ItemGroup>
 </Project>
